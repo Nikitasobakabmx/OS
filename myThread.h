@@ -1,4 +1,6 @@
-#inclide "lab2.h"
+#include "lab2.h"
+#include <map>
+#include <string> 
 
 class myThread{
 private:
