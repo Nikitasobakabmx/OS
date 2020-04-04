@@ -153,7 +153,7 @@ int lab2_init()
     pthread_join(tid[0], NULL);
     
     // free resources
-    pthread_mutex_destroy(&lock);
+    pthread_mutex_destroy(&lock); 
     sem_destroy(&semD);
     sem_destroy(&semE);
     
