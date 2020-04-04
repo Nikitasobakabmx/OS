@@ -7,4 +7,5 @@ SOURCES += \
         main.cpp
 
 HEADERS += \
-    CalculationGraph.h
+    CalculationGraph.h \
+    Run.h

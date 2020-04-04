@@ -6,6 +6,17 @@
 #include <vector>
 #include <unordered_map>
 
+struct Edge {
+    Edge(const std::string &inNodeName,const std::string &inEndgeName)
+        : nodeName(inNodeName),
+          name(inEndgeName)
+    {}
+
+    std::string nodeName;
+    std::string name;
+};
+
+
 class Node {
 public:
     using Pointer = std::shared_ptr<Node>;
@@ -25,20 +36,19 @@ private:
 };
 
 namespace NodeFactory {
-    static Node::Pointer create(const std::string &name) {
-        return std::make_shared<Node>(name);
-    }
+
 }
 
 
 class CalculationGraph {
 public:
-    CalculationGraph& conncet(Node::Pointer from, Node::Pointer to) {
+    CalculationGraph& connect(Node::Pointer from, Node::Pointer to,const std::string &edgeName) {
         if (from != nullptr && to != nullptr ) {
             const auto fromName = from->name();
             const auto toName = to->name();
 
-            m_adjacencyList[fromName].push_back(toName);
+            const auto edge = Edge(toName, edgeName);
+            m_adjacencyList[fromName].push_back(edge);
         }
         return *this;
     }
@@ -50,10 +60,33 @@ public:
 
         return nullptr;
     }
+
+    std::vector<Edge> getEdges(const Node::Pointer &node) {
+        if (node == nullptr) {
+            return {};
+        }
+
+        const auto ndoeName = node->name();
+
+        if (m_adjacencyList.find(ndoeName) != m_adjacencyList.end()) {
+            return  m_adjacencyList[ndoeName];
+        }
+
+        return {};
+    }
+
+     Node::Pointer create(const std::string &name) {
+        const auto node = std::make_shared<Node>(name);
+
+        m_nodes[name] = node;
+
+        return node;
+    }
+
 private:
 
 
-    std::unordered_map<std::string, std::vector<std::string>> m_adjacencyList;
+    std::unordered_map<std::string, std::vector<Edge>> m_adjacencyList;
     std::unordered_map<std::string, Node::Pointer> m_nodes;
 };
 
