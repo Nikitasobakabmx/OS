@@ -30,7 +30,7 @@ public:
     }
     std::map<char, myThread*> fabric(std::string sequence)
     { 
-        auto *tmp = new std::map();
+        auto *tmp = new std::map<char, myThread>();
         for(auto it : sequence)
             tmp->insert(std::pair<char, *myThread>(it, new myThread(it, tmp)));
         return tmp;
@@ -38,8 +38,6 @@ public:
 
     void doSmth(std::string name, sem_t *semA, sem_t *semB)
     {
-        struct timespec ts;
-        ts.tv_sec = 1;
         if(semA != NULL)
         {
             std::cout << "sem" << std::endl;
