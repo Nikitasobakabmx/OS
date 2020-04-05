@@ -1,27 +1,21 @@
 #include <iostream>
 #include <map>
-#define in_range(n)  = 0; i < n; i++
-std::map<char, pthread_t> tid;
- 
-void *thread_b(void *ptr)
-{
-    return ptr;
-}
+#include <semaphore.h>
 
-int main()
+#include "defines.h"
+#include "myThread.h"
+// #define in_range(n)  = 0; i < n; i++
+
+
+int MAIN()
 {
-    for (int i in_range(10) )
-        std::cout << i << std::endl;
-    std::string init("abcd");
-    for(auto it : init)
-    {    
-        pthread_t *tmp = new pthread_t();
-        if(!pthread_create(tmp, NULL, thread_b, NULL))
-        {    
-            tid.insert(std::pair<char, pthread_t>(it, *tmp));
-            pthread_join(tid[it], NULL);
-            tid.erase(it);
-        }
-    }
+    std::map<char, myThread*> *tid = nullptr;  
+    std::map<char, sem_t> *sems = nullptr;
+    pthread_mutex_t *lock = new pthread_mutex_t;
+    std::string seq("abscdefghim");
+    tid = myThread::fabric(seq, lock);
+    for(auto& it : *tid )
+        it.second->run();
+    myThread::wait(seq, (*tid)[seq[0]]->tid);
     return 0;
 }
